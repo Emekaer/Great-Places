@@ -42,8 +42,25 @@ const PlacesNavigator = () => {
           };
         }}
       />
-      <Stack.Screen name="PlaceDetailScreen" component={PlaceDetailScreen} />
-      <Stack.Screen name="NewPlaceScreen" component={NewPlaceScreen} />
+      <Stack.Screen
+        name="PlaceDetailScreen"
+        component={PlaceDetailScreen}
+        options={(navData) => {
+          const placeTitle = navData.route.params.placeTitle;
+          return {
+            headerTitle: placeTitle,
+          };
+        }}
+      />
+      <Stack.Screen
+        name="NewPlaceScreen"
+        component={NewPlaceScreen}
+        options={() => {
+          return {
+            title: "Add Place",
+          };
+        }}
+      />
       <Stack.Screen name="MapScreen" component={MapScreen} />
     </Stack.Navigator>
   );
