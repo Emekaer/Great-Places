@@ -1,5 +1,5 @@
 import Places from "../../models/places";
-import { ADD_PLACES } from "../actions/places";
+import { ADD_PLACES, DELETE_PLACES } from "../actions/places";
 
 const initialState = {
   allPlaces: [],
@@ -13,6 +13,12 @@ export default (state = initialState, action) => {
         action.placeData.title
       );
       return { ...state, allPlaces: state.allPlaces.concat(newPlace) };
+
+    case DELETE_PLACES:
+      return {
+        ...state,
+        allPlaces: state.allPlaces.filter((place) => place.id !== action.id),
+      };
 
     default:
       return state;

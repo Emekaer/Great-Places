@@ -5,7 +5,6 @@ import PlaceItem from "../components/PlaceItem";
 
 const PlaceListScreen = (props) => {
   const places = useSelector((state) => state.places.allPlaces);
-  console.log(places);
   return (
    
     <FlatList 
