@@ -9,11 +9,11 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_PLACES:
       const newPlace = new Places(
-        new Date().toString(),
+        action.placeData.id.toString(),
         action.placeData.title,
         action.placeData.imageUri,
       );
-      return { ...state, allPlaces: state.allPlaces.concat(newPlace) };
+      return { allPlaces: state.allPlaces.concat(newPlace) };
 
     case DELETE_PLACES:
       return {
