@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Button,
@@ -14,6 +14,17 @@ import MapPreview from "./MapPreview";
 const LocationPicker = (props) => {
   const [isLoading, setIsoading] = useState(false);
   const [pickedLocation, setPickedLocation] = useState();
+
+  const mapLocation = props.route.params.pickedLocation;
+
+  const {onLocationPicked} = props;
+
+  useEffect(() => {
+    if (mapLocation) {
+      setPickedLocation(mapLocation);
+      onLocationPicked(mapLocation);
+    }
+  }, [mapLocation, onLocationPicked]);
 
   const getLocationHandler = async () => {
     let { status } = await Location.requestPermissionsAsync();
@@ -33,6 +44,10 @@ const LocationPicker = (props) => {
       });
       console.log(location);
       setPickedLocation({
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
+      });
+      props.onLocationPicked({
         lat: location.coords.latitude,
         lng: location.coords.longitude,
       });
@@ -91,7 +106,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   actions: {
-    flexDirection: 'row',
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     width: "100%",

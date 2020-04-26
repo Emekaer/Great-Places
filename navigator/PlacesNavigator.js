@@ -1,5 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { Text, TouchableOpacity } from "react-native";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { Ionicons } from "@expo/vector-icons";
@@ -61,7 +62,27 @@ const PlacesNavigator = () => {
           };
         }}
       />
-      <Stack.Screen name="MapScreen" component={MapScreen} />
+      <Stack.Screen
+        name="MapScreen"
+        component={MapScreen}
+        options={(navData) => {
+          /* const saveLocation */ console.log(
+            navData.route.params.saveLocation
+          );
+
+          return {
+            title: "Select Map Location",
+            headerRight: () => (
+              <TouchableOpacity
+                style={{ marginHorizontal: 20 }}
+                onPress={saveLocation}
+              >
+                <Text style={{ fontSize: 16, color: "white" }}>Save</Text>
+              </TouchableOpacity>
+            ),
+          };
+        }}
+      />
     </Stack.Navigator>
   );
 };

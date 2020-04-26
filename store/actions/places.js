@@ -3,9 +3,27 @@ export const DELETE_PLACES = "DELETE_PLACES";
 export const FETCH_PLACES = "FETCH_PLACES";
 import { insertPlace, fetchPlaces } from "../../helpers/db";
 import * as FileSystem from "expo-file-system";
+import ENV from "../../env";
 
-export const addPlaces = (title, image) => {
+export const addPlaces = (title, image, location) => {
   return async (dispatch) => {
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat},${location.lng}&key=${ENV.googleApiKey}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Something went wrong!");
+    }
+
+    const resData = await response.json();
+    console.log(resData)
+
+    if(!resData.results){
+      throw new Error("Something went wrong!");
+    }
+
+    const address = resData.results[0].formatted_address;
+
     const fileName = image.split("/").pop();
     const newPath = FileSystem.documentDirectory + fileName;
 
@@ -17,15 +35,22 @@ export const addPlaces = (title, image) => {
       const dbResult = await insertPlace(
         title,
         newPath,
-        "Dummy Address",
-        15.6,
-        12.3
+        address,
+        location.lat,
+        location.lng
       );
-      console.log(dbResult);
-      console.log('Break');
       dispatch({
         type: ADD_PLACES,
-        placeData: { id: dbResult.insertId, title: title, imageUri: newPath },
+        placeData: {
+          id: dbResult.insertId,
+          title: title,
+          imageUri: newPath,
+          address = address,
+         coords :{
+           lat:location.lat,
+           lng: location.lng,
+         }
+        },
       });
     } catch (err) {
       console.log(err);
